@@ -11,16 +11,16 @@ The rest of this tutorial will be performed in a terminal.
 1. Clone this repository locally and make it the current working folder.
 
    ```console
-   $ git clone https://github.com/shadanan/gcp-scc-finding-notification-log.git
-   $ cd gcp-scc-finding-notification-log
+   git clone https://github.com/shadanan/gcp-scc-finding-notification-log.git
+   cd gcp-scc-finding-notification-log
    ```
 
 1. In the shell that we prepared at the beginning, set the org and project ID. The selected project is where the Cloud Function will execute form.
 
    ```console
-   $ export ORG_ID=<your org id>
-   $ export PROJECT_ID=<your project id>
-   $ gcloud config set project $PROJECT_ID
+   export ORG_ID=<your org id>
+   export PROJECT_ID=<your project id>
+   gcloud config set project $PROJECT_ID
    ```
 
 ### Configure the Pub/Sub Topic and Subscription
@@ -30,14 +30,14 @@ Cloud Pub/Sub is a real-time messaging service that enables messages to be sent 
 1. Create the topic where all the findings will be published.
 
    ```console
-   $ gcloud pubsub topics create scc-findings-topic
-   $ export TOPIC=projects/$PROJECT_ID/topics/scc-findings-topic
+   gcloud pubsub topics create scc-findings-topic
+   export TOPIC=projects/$PROJECT_ID/topics/scc-findings-topic
    ```
 
 1. Configure SCC to publish notifications to our topic.
 
    ```console
-   $ gcloud scc notifications create scc-findings-notify \
+   gcloud scc notifications create scc-findings-notify \
      --organization $ORG_ID --pubsub-topic $TOPIC
    ```
 
@@ -46,7 +46,7 @@ Cloud Pub/Sub is a real-time messaging service that enables messages to be sent 
 1. Deploy the `scc-finding-notification-log` cloud function. If you have not enabled Cloud Build API, then this command may fail. Follow the link in the error message to enable it and then try again.
 
    ```console
-   $ gcloud functions deploy scc-finding-notification-log \
+   gcloud functions deploy scc-finding-notification-log \
      --entry-point=process_notification \
      --source=cf --trigger-topic=scc-findings-topic --runtime=python39
    ```
